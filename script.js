@@ -10,6 +10,7 @@ const display = document.querySelector("#display");
 const numberBtns = document.querySelectorAll(".number");
 const operatorBtns = document.querySelectorAll(".operator");
 const equals = document.querySelector("#result");
+const clear = document.querySelector("#clear");
 
 let number1 = 0;
 let number2 = "";
@@ -37,13 +38,25 @@ numberBtns.forEach((button) => {
 
 operatorBtns.forEach((button) => {
     button.addEventListener("click", (e) => {
-        if(operator === null && number2 === "") {
+        if(operator === null && number2 === "" && display.textContent !== "ERROR") {
             operator = e.target.textContent;
             display.textContent += e.target.textContent;
-        } else if (operator != null && number2 == "0123456789") {
+        } else if (operator != null && number2 != "") {
+            if (number2 == "0" && operator == "/") {
+                error();
+            } else {
+                operate();
+                display.textContent = result;
+                operator = null;
+                number1 = result;
+                number2 = "";
+                operator = e.target.textContent;
+                display.textContent += e.target.textContent;
+            }
+        } else if (operator != null && number2 === "") {
+            number2 = number1;
             operate();
             display.textContent = result;
-            operator = null;
             number1 = result;
             number2 = "";
             operator = e.target.textContent;
@@ -53,12 +66,22 @@ operatorBtns.forEach((button) => {
 });
 
 equals.addEventListener("click",() => {
-    operate();
-    display.textContent = result;
-    operator = null;
-    number1 = result;
-    number2 = "";
+    if (number1 !== "" && number2 !== "") {
+        operate();
+        display.textContent = result;
+        operator = null;
+        number1 = result;
+        number2 = "";
+    }
 });
+
+clear.addEventListener("click", () => {
+    number1 = 0;
+    number2 = "";
+    result = 0;
+    operator = null;
+    display.textContent = 0
+})
 
 function operate() {
     firstNumber = parseInt(number1);
@@ -73,4 +96,12 @@ function operate() {
     } else if(operating == "/") {
         result = divide(firstNumber, secondNumber);
     }
+}
+
+function error() {
+    operator = null;
+    number1 = 0;
+    result = 0;
+    display.textContent = "ERROR"
+    number2 = ""
 }
