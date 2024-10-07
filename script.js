@@ -17,21 +17,25 @@ let number2 = "";
 let operator = null;
 let result = 0;
 
-display.textContent = "0"
+display.textContent = "0";
 
 numberBtns.forEach((button) => {
     button.addEventListener("click", (e) => {
         if (operator === null) {
-            if (number1 == result) {
-                display.textContent = e.target.textContent;
-                number1 = e.target.textContent;
-            } else {
-                display.textContent += e.target.textContent;
-                number1 += e.target.textContent;
+            if (display.textContent.length <= 6) {
+                if (number1 == result) {
+                    display.textContent = e.target.textContent;
+                    number1 = e.target.textContent;
+                } else {
+                    display.textContent += e.target.textContent;
+                    number1 += e.target.textContent;
+                }
             }
         } else if (operator != null) {
-            display.textContent += e.target.textContent;
-            number2 += e.target.textContent;
+            if (number2.length <= 6) {
+                display.textContent += e.target.textContent;
+                number2 += e.target.textContent;
+            }
         } 
     });
 });
